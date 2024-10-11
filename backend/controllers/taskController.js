@@ -51,6 +51,14 @@ exports.getTask = async (req, res) =>{
 
 exports.postTask = async( req, res) =>{
     try{
+
+        // if (!req.body.title) {
+        //     return res.status(400).json({
+        //         status: 'fail',
+        //         message: 'Task title is required'
+        //     });
+        // }
+
         const task = await Task.create(req.body)
 
         res.status(201).json({
@@ -64,6 +72,7 @@ exports.postTask = async( req, res) =>{
 
         res.status(500).json({
             status: 'Error try again',
+            message: err.message
             
         })
 

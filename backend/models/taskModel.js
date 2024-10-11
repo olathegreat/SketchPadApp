@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const taskSchema = new mongoose.Schema({
-    header: {
+    taskTitle: {
         type: String,
         required: [true, 'Add  brief header for task'],
         trim: true,
@@ -9,14 +9,14 @@ const taskSchema = new mongoose.Schema({
         
     
     },
-    description: {
+    taskDescription: {
         type: String,
         required: [true, 'Write description for task']
     },
     taskStatus: {
         type: String,
         enum: ['To Do','In Progress', 'Completed'],
-        required: [true, 'task status must be added']
+        // required: [true, 'task status must be added']
     },
     taskCreatedAt: Date,
     taskUpdatedAt: Date,
@@ -30,6 +30,8 @@ const taskSchema = new mongoose.Schema({
 taskSchema.pre('save', async function(next){
     this.taskCreatedAt = Date.now();
     this.taskStatus = 'To Do';
+
+    next();
 })
 
 const Task = mongoose.model('Task', taskSchema )
