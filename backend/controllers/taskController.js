@@ -5,7 +5,7 @@ const Task = require('./../models/taskModel')
 exports.getTasks = async(req, res)=>{
 
     try{
-        const tasks = await Task.find()
+        const tasks = await Task.find().sort('-taskCreatedAt')
 
         res.status(200).json({
             status:'success',
