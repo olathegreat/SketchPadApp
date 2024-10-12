@@ -16,8 +16,10 @@ app.use(express.json())
 
 
 const taskRouter = require('./routes/taskRouter')
+const authRouter = require('./routes/authRouter')
 
 app.use('/api/v1/tasks', taskRouter)
+app.use('/api/v1/auth', authRouter)
 
 
 
