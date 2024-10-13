@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const User = require('./userModel')
 
 const taskSchema = new mongoose.Schema({
     taskTitle: {
@@ -20,18 +21,32 @@ const taskSchema = new mongoose.Schema({
     },
     taskCreatedAt: Date,
     taskUpdatedAt: Date,
-    taskCompletedAt: Date
+    taskCompletedAt: Date,
+    user:{
+        type:mongoose.Schema.ObjectId,
+        ref:'User',
+        required:[true, 'review must belong to a user']
+    }
 },{
     toJSON: {virtuals: true},
     toObject: {virtual: true}
 })
 
+taskSchema.index({user:1},{unique:true})
 
 taskSchema.pre('save', async function(next){
     this.taskCreatedAt = Date.now();
     this.taskStatus = 'To Do';
 
     next();
+})
+
+taskSchema.pre(/^find/, function(next){
+    this.populate({
+        path:'user',
+    })
+
+    next()
 })
 
 const Task = mongoose.model('Task', taskSchema )

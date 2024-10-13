@@ -3,9 +3,10 @@ const Task = require('./../models/taskModel')
 
 
 exports.getTasks = async(req, res)=>{
+    console.log(req.user)
 
     try{
-        const tasks = await Task.find().sort('-taskCreatedAt')
+        const tasks =  await Task.find({ user: req.user._id }).sort('-taskCreatedAt');
 
         res.status(200).json({
             status:'success',
@@ -30,7 +31,7 @@ exports.getTasks = async(req, res)=>{
 
 exports.getTask = async (req, res) =>{
     try{
-        const task = await Task.findById(req.params.id)
+        const task = await Task.findOne({ _id: req.params.id, user: req.user.id });
 
         res.status(200).json({
             status:'success',
@@ -58,7 +59,7 @@ exports.postTask = async( req, res) =>{
         //         message: 'Task title is required'
         //     });
         // }
-
+        req.body.user = req.user.id
         const task = await Task.create(req.body)
 
         res.status(201).json({
